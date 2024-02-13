@@ -14,7 +14,35 @@ variable "vpc_cidr_block" {
 
 variable "subnet_cidr_block" {
     description = "The IPv4 CIDR block for the subnet"
-    type        = map(string)
+    type        = map(set(string))
+}
+
+variable "r53_details" {
+    description = "Details for the Route53 configuration"
+    type = map(object({
+        name    = string
+        comment = string
+    }))
+}
+
+variable "sg_ingress_config" {
+    description = "Details for Security Groups Ingress rules"
+    type = map(object({
+        description = string,
+        ip_protocol = string,
+        cidr_ipv4   = string,
+        from_port   = string,
+        to_port     = string
+    }))
+}
+
+variable "sg_egress_config" {
+    description = "Details for Security Groups Egress rules"
+    type = map(object({
+        description = string,
+        ip_protocol = string,
+        cidr_ipv4   = string
+    }))
 }
 
 # ---------------------------------------------------------------------------------------------------------------------

@@ -5,7 +5,10 @@ locals {
   vpc_name         = format("%s-vpc", local.workspace)
   subnet_name      = format("%s-subnet", local.workspace)
   igw_name         = format("%s-igw", local.workspace)
-  route_table_name =  format("%s-route-table", local.workspace)
+  route_table_name = format("%s-route-table", local.workspace)
+  sg_name          = format("%s-security-group", local.workspace)
+  sg_ingress_name  = format("%s-ingress-security", local.workspace)
+  sg_egress_name   = format("%s-egress-security", local.workspace)
 }
 
 # Info given by a file specified at init time, e.g. terraform init -backend-config=backend_configs/dev-eu-w1.tfbackend -reconfigure
@@ -58,11 +61,34 @@ module "route" {
 }
 
 #### Security Group
-/*module "security_group" {
+module "security_group" {
   source = "../../modules/resources/security_groups/security_group"
+  
+  name   = local.sg_name
+  vpc_id = module.vpc.id
+}
 
-}*/
+module "security_group_ingress" {
+  source = "../../modules/resources/security_groups/vpc_security_group_ingress_rule"
+  
+  name              = local.sg_ingress_name
+  security_group_id = module.security_group.id
+  description       = var.sg_ingress_config[local.workspace].description
+  ip_protocol       = var.sg_ingress_config[local.workspace].ip_protocol
+  cidr_ipv4         = var.sg_ingress_config[local.workspace].cidr_ipv4
+  from_port         = var.sg_ingress_config[local.workspace].from_port
+  to_port           = var.sg_ingress_config[local.workspace].to_port
+}
 
+module "security_group_egress" {
+  source = "../../modules/resources/security_groups/vpc_security_group_egress_rule"
+  
+  name              = local.sg_egress_name
+  security_group_id = module.security_group.id
+  description       = var.sg_egress_config[local.workspace].description
+  ip_protocol       = var.sg_egress_config[local.workspace].ip_protocol
+  cidr_ipv4         = var.sg_egress_config[local.workspace].cidr_ipv4
+}
 
 #### DNS/Route 53
 module "route53_private" {
@@ -73,6 +99,10 @@ module "route53_private" {
   vpc_id  = module.vpc.id
 }
 
-/*module "route53_public" {
-  source = "../../modules/resources/route53/route53_zone"
-}*/
+#### S3
+
+#### RDS
+
+#### CloudFront
+
+#### CloudWatch - monitoring & logs
