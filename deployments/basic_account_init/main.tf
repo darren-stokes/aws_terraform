@@ -60,7 +60,19 @@ module "route" {
   gateway_id             = module.igw.id
 }
 
-#### Security Group
+#### IAM
+module "iam_role" {
+  source = "../../modules/resources/iam/iam_role"
+
+  name               = "name"
+  assume_role_policy = "sds"
+}
+
+# Audit and Monitoring role
+
+# EC2 role
+
+#### Security Groups
 module "security_group" {
   source = "../../modules/resources/security_groups/security_group"
   
@@ -89,6 +101,8 @@ module "security_group_egress" {
   ip_protocol       = var.sg_egress_config[local.workspace].ip_protocol
   cidr_ipv4         = var.sg_egress_config[local.workspace].cidr_ipv4
 }
+
+#### Load Balancing
 
 #### DNS/Route 53
 module "route53_private" {
