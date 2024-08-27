@@ -45,6 +45,14 @@ variable "sg_egress_config" {
     }))
 }
 
+variable "cloudwatch_logs" {
+    description = "Details for the Cloudwatch logs"
+    type = map(object({
+      name           = string,
+      retention_days = number,
+      application    = string
+    }))
+}
 # ---------------------------------------------------------------------------------------------------------------------
 # OPTIONAL PARAMETERS
 # Generally, these values won't need to be changed as they have defaults set.

@@ -121,3 +121,26 @@ r53_details = {
         comment = "Prod Internal Route53 zone for Europe West 1"
     }
 }
+
+cloudwatch_logs = {
+    # Dev
+    dev-eu-w1 = {
+      name           = "dev-cloudwatch-logs",
+      retention_days = 3,
+      application    = "dev-app"
+    }
+
+    # Staging
+    staging-eu-w1 = {
+      name           = "staging-cloudwatch-logs",
+      retention_days = 5,
+      application    = "staging-app"
+    }
+
+    # Prod
+    prod-eu-w1 = {
+      name           = "prod-cloudwatch-logs",
+      retention_days = 14,
+      application    = "prod-app"
+    }
+}

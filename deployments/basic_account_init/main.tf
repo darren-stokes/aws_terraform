@@ -120,3 +120,11 @@ module "route53_private" {
 #### CloudFront
 
 #### CloudWatch - monitoring & logs
+module "cloudwatch_logs" {
+  source = "../../modules/resources/cloudwatch/logs/"
+
+  name           = var.cloudwatch_logs[local.workspace].name
+  retention_days = var.cloudwatch_logs[local.workspace].retention_days
+  environment    = local.workspace
+  application    = var.cloudwatch_logs[local.workspace].application
+}
